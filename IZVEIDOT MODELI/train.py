@@ -1,3 +1,4 @@
+# Importē torch bibliotēku un treniņa tekstus no datini.py faila
 import torch
 from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
@@ -5,7 +6,7 @@ from torch.utils.data import DataLoader
 from torch import nn
 from datini import dataset
 
-
+# Modeļa valoda
 tokenizer = get_tokenizer('basic_english')
 
 def yield_tokens(data_iter):
@@ -14,10 +15,11 @@ def yield_tokens(data_iter):
 
 vocab = build_vocab_from_iterator(yield_tokens(dataset), specials=["<unk>"])
 vocab.set_default_index(vocab["<unk>"])
-
+# Kādi kategorijas pastāv
 text_pipeline = lambda x: vocab(tokenizer(x))
 label_pipeline = lambda x: ["Recept", "Reminder", "Link", "Personal Info"].index(x)
 
+# Pats klasificēšanas modulis
 class TextClassificationModel(nn.Module):
     def __init__(self, vocab_size, embed_dim, num_class):
         super(TextClassificationModel, self).__init__()
@@ -47,8 +49,8 @@ def collate_batch(batch):
     text_list = torch.cat(text_list)
     return label_list.to(device), text_list.to(device), offsets.to(device)
 
+# Mašīnapmācības moduļi
 dataloader = DataLoader(dataset, batch_size=8, shuffle=False, collate_fn=collate_batch)
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = TextClassificationModel(len(vocab), 64, 4).to(device)
 criterion = torch.nn.CrossEntropyLoss()
@@ -65,7 +67,7 @@ def classify_new_text(new_text, model, vocab, tokenization_func):
     predicted_category = categories[category_index]
     
     return predicted_category
-
+# Trenēšanas iestastījumi
 epochs = 1000
 for epoch in range(1, epochs + 1):
     model.train()

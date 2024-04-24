@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Post
-from django.core.exceptions import ValidationError
+# Torch bibliotēkās un mašīnapmācības lietone
 import torch
 from torchtext.data.utils import get_tokenizer
 from .torch_models import TextClassificationModel
@@ -22,6 +22,7 @@ def classify_new_text(new_text, model, vocab, tokenization_func):
     return predicted_category
 
 def home(request):
+    # Django iegūst datus ar POST metodi un ieraksta datubāzē "db.sqlite3"
     error = None
     if request.method == 'POST':
         title = request.POST.get('title')

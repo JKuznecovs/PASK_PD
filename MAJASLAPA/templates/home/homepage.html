@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PASK ✍️</title>
+    <!-- Iegūst css failu no mapes "static" -->
     <link rel="stylesheet" type="text/css" href="{% static 'homepage.css' %}">
 </head>
 <body>
+    <!-- Iegūst mājaslapas logo no mapes "static" -->
     <img src="{% static 'pask.png' %}" alt="PASK" class="PASK">
+    <!-- Izveidojās logs ar piezīmju izveidi -->
     <button class="izveidot-piezimi" onclick="openWindow()">Izveidot piezīmi</button>
     <div id="note-form" class="logs">
         <form action="{% url 'home:home' %}" method="POST">
@@ -20,17 +23,18 @@
           <input type="submit" value="Izveidot" class="sutit"/>
         </form>
       </div>
+    <!-- "Izveidot piezīmi" pogas funkcionalitāte -->
     <script>
     function openWindow() {
       const noteForm = document.getElementById("note-form");
       noteForm.style.display = "block";
     }
     </script>
-
+<!-- Gadījumā, ja no back-end atnāk ziņa, ka piezīmē nav virsraksta vai teksta -->
 {% if error %}  
   <p class="error">{{ error }}</p>
 {% endif %}
-
+<!-- Piezīmju saraksts -->
 <ul class="post-list">
     {% for post in posts %}
       <li>
